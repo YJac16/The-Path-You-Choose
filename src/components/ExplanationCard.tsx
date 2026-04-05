@@ -6,17 +6,15 @@ export function ExplanationCard({
   reference?: string;
 }) {
   return (
-    <div className="rounded-2xl bg-sage/10 dark:bg-sage/15 p-5 shadow-soft border border-sage/20 dark:border-sage/30">
-      <p className="text-xs font-medium uppercase tracking-wider text-sage-dark dark:text-sage-light mb-2">
+    <div className="mt-1 rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm">
+      <p className="mb-2 text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
         Reflection
       </p>
-      <p className="text-base text-ink dark:text-paper leading-relaxed mb-3">
-        {text}
-      </p>
+      <p className="mb-3 leading-spacious text-ds-text">{text}</p>
       {reference ? (
-        <p className="text-sm text-inkMuted dark:text-paper/65 italic border-t border-ink/10 dark:border-white/10 pt-3">
+        <div className="text-xs italic leading-spacious text-ds-muted">
           {reference}
-        </p>
+        </div>
       ) : null}
     </div>
   );

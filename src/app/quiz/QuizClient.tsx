@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getChapter, maxChapterId } from "@/data/chapters";
+import { GameStepIndicator } from "@/components/GameStepIndicator";
 import { FadeSlide } from "@/components/motion/FadeSlide";
+import { PageHeading } from "@/components/PageHeading";
 import { QuizCard } from "@/components/QuizCard";
 import { useGame } from "@/context/GameContext";
 
@@ -83,7 +85,7 @@ export function QuizClient() {
 
   if (!hydrated || !chapter || !state.userType || phase !== "explanation") {
     return (
-      <div className="py-20 text-center text-inkMuted dark:text-paper/60 text-sm">
+      <div className="py-20 text-center text-sm text-ds-muted">
         Loading quiz…
       </div>
     );
@@ -94,74 +96,83 @@ export function QuizClient() {
 
   if (finished && resultScore !== null) {
     return (
-      <FadeSlide>
-        <div className="pt-4 pb-8 space-y-6">
-          <div className="rounded-2xl bg-card dark:bg-cardDark p-6 shadow-soft border border-ink/5 dark:border-white/5 text-center">
-            <p className="text-xs uppercase tracking-wider text-sage-dark dark:text-sage-light mb-2">
-              Chapter complete
-            </p>
-            <h2 className="text-xl font-semibold text-ink dark:text-paper mb-2">
-              You scored {resultScore} / {totalQs}
-            </h2>
-            <p className="text-inkMuted dark:text-paper/70 text-[15px] leading-relaxed">
-              Every review deepens understanding. The next chapter is ready when
-              you are.
-            </p>
+      <div className="space-y-6">
+        <PageHeading title="Results" subtitle={chapter.title} />
+        <GameStepIndicator active="Quiz" />
+        <FadeSlide>
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-ds-line bg-ds-card p-6 text-center shadow-sm">
+              <p className="mb-2 text-xs uppercase tracking-wider text-[var(--primary)]">
+                Chapter complete
+              </p>
+              <h2 className="font-display text-xl font-semibold text-ds-text">
+                You scored {resultScore} / {totalQs}
+              </h2>
+              <p className="mt-3 text-[15px] leading-spacious text-ds-muted">
+                Every review deepens understanding. The next chapter is ready when
+                you are.
+              </p>
+            </div>
+            {cid < maxChapterId() ? (
+              <Link
+                href="/game"
+                className="btn-primary mt-0 flex min-h-[52px] items-center justify-center no-underline"
+              >
+                Next chapter
+              </Link>
+            ) : (
+              <Link
+                href="/progress"
+                className="btn-primary mt-0 flex min-h-[52px] items-center justify-center no-underline"
+              >
+                View journey
+              </Link>
+            )}
           </div>
-          {cid < maxChapterId() ? (
-            <Link
-              href="/game"
-              className="flex min-h-[52px] items-center justify-center rounded-xl bg-sage text-white dark:text-paper font-medium shadow-soft w-full"
-            >
-              Next chapter
-            </Link>
-          ) : (
-            <Link
-              href="/progress"
-              className="flex min-h-[52px] items-center justify-center rounded-xl bg-sage text-white dark:text-paper font-medium shadow-soft w-full"
-            >
-              View journey
-            </Link>
-          )}
-        </div>
-      </FadeSlide>
+        </FadeSlide>
+      </div>
     );
   }
 
   return (
-    <div className="pt-2 pb-6 space-y-5">
-      <AnimatePresence mode="wait">
-        <FadeSlide key={qIndex}>
-          <QuizCard
-            item={item}
-            index={qIndex}
-            total={totalQs}
-            selectedIndex={selected}
-            revealed={revealed}
-            onSelect={onSelect}
-          />
-        </FadeSlide>
-      </AnimatePresence>
+    <div className="space-y-6">
+      <PageHeading title="Reflection quiz" subtitle={chapter.title} />
+      <GameStepIndicator active="Quiz" />
 
-      {revealed && item ? (
-        <FadeSlide>
-          <div className="rounded-xl bg-sage/10 dark:bg-sage/15 border border-sage/25 dark:border-sage/30 p-4">
-            <p className="text-sm font-medium text-ink dark:text-paper mb-1">
-              {selected === item.answer ? "Well done" : "Takeaway"}
-            </p>
-            <p className="text-[15px] text-inkMuted dark:text-paper/75 leading-relaxed">
-              {item.explanation}
-            </p>
-            <button
-              type="button"
-              onClick={advanceAfterAnswer}
-              className="mt-4 w-full min-h-[48px] rounded-xl bg-sage text-white dark:text-paper font-medium"
-            >
-              {qIndex + 1 < totalQs ? "Next question" : "See results"}
-            </button>
-          </div>
-        </FadeSlide>
-      ) : null}
+      <div className="space-y-4">
+        <AnimatePresence mode="wait">
+          <FadeSlide key={qIndex}>
+            <QuizCard
+              item={item}
+              index={qIndex}
+              total={totalQs}
+              selectedIndex={selected}
+              revealed={revealed}
+              onSelect={onSelect}
+            />
+          </FadeSlide>
+        </AnimatePresence>
+
+        {revealed && item ? (
+          <FadeSlide>
+            <div className="rounded-xl border border-ds-line bg-[var(--primary-soft)] p-4">
+              <p className="mb-1 text-sm font-medium text-ds-text">
+                {selected === item.answer ? "Well done" : "Takeaway"}
+              </p>
+              <p className="text-[15px] leading-spacious text-ds-muted">
+                {item.explanation}
+              </p>
+              <button
+                type="button"
+                onClick={advanceAfterAnswer}
+                className="btn-primary mt-4"
+              >
+                {qIndex + 1 < totalQs ? "Next question" : "See results"}
+              </button>
+            </div>
+          </FadeSlide>
+        ) : null}
+      </div>
     </div>
   );
 }

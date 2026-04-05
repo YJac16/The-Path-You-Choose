@@ -1,17 +1,20 @@
+"use client";
+
+import { motion } from "framer-motion";
 import type { Chapter } from "@/types/game";
 
 export function ScenarioCard({ chapter }: { chapter: Chapter }) {
   return (
-    <div className="rounded-2xl bg-card dark:bg-cardDark p-5 shadow-soft border border-ink/5 dark:border-white/5">
-      <p className="text-xs font-medium uppercase tracking-wider text-sage-dark dark:text-sage-light mb-2">
-        Chapter {chapter.id}
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm"
+    >
+      <p className="mb-3 text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
+        Scenario
       </p>
-      <h1 className="text-xl font-semibold text-ink dark:text-paper leading-snug mb-3">
-        {chapter.title}
-      </h1>
-      <p className="text-base text-inkMuted dark:text-paper/70 leading-relaxed">
-        {chapter.scenario}
-      </p>
-    </div>
+      <p className="text-base leading-spacious text-ds-text">{chapter.scenario}</p>
+    </motion.div>
   );
 }

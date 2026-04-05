@@ -19,33 +19,38 @@ export function QuizCard({
   onSelect: (i: number) => void;
 }) {
   return (
-    <div className="rounded-2xl bg-card dark:bg-cardDark p-5 shadow-soft border border-ink/5 dark:border-white/5">
-      <p className="text-xs font-medium uppercase tracking-wider text-sage-dark dark:text-sage-light mb-3">
+    <div className="space-y-4 rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm">
+      <p className="text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
         Question {index + 1} of {total}
       </p>
-      <p className="text-lg font-medium text-ink dark:text-paper leading-snug mb-5">
+      <h3 className="font-display text-lg font-medium leading-snug text-ds-text">
         {item.question}
-      </p>
+      </h3>
       <ul className="flex flex-col gap-3">
         {item.options.map((opt, i) => {
           const isCorrect = i === item.answer;
           const isSel = selectedIndex === i;
-          let ring =
-            "border-ink/10 dark:border-white/10 hover:border-sage/40 dark:hover:border-sage/50";
+          let cls =
+            "border-ds-line bg-ds-card text-ds-text hover:border-[var(--primary)]/50";
           if (revealed) {
-            if (isCorrect) ring = "border-sage dark:border-sage-light bg-sage/15";
-            else if (isSel && !isCorrect)
-              ring = "border-red-300 dark:border-red-400/60 bg-red-50 dark:bg-red-950/30";
-            else ring = "border-ink/5 dark:border-white/5 opacity-60";
+            if (isCorrect) {
+              cls =
+                "border-[var(--primary)] bg-[var(--primary-soft)] text-ds-text";
+            } else if (isSel && !isCorrect) {
+              cls =
+                "border-red-300 bg-red-50 text-ds-text dark:border-red-500/50 dark:bg-red-950/35";
+            } else {
+              cls = "border-ds-line/60 bg-ds-bg/50 text-ds-muted opacity-70";
+            }
           }
           return (
             <li key={i}>
               <motion.button
                 type="button"
-                whileTap={{ scale: revealed ? 1 : 0.99 }}
+                whileTap={{ scale: revealed ? 1 : 0.985 }}
                 disabled={revealed}
                 onClick={() => onSelect(i)}
-                className={`w-full min-h-[52px] rounded-xl px-4 py-3 text-left text-[15px] text-ink dark:text-paper border ${ring} transition-colors disabled:cursor-default`}
+                className={`w-full min-h-[52px] rounded-xl border px-4 py-3 text-left text-[15px] transition-all duration-200 disabled:cursor-default ${cls}`}
               >
                 {opt}
               </motion.button>

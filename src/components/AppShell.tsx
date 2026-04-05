@@ -9,14 +9,19 @@ export function AppShell({
   showFooter?: boolean;
 }) {
   return (
-    <div className="min-h-dvh bg-paper dark:bg-paperDark text-ink dark:text-paper">
-      <Header />
-      <main
-        className={`max-w-lg mx-auto px-4 ${showFooter ? "pb-nav" : "pb-8"}`}
-      >
-        {children}
-      </main>
-      {showFooter ? <FooterNav /> : null}
+    <div className="relative flex min-h-dvh flex-col bg-ds-bg text-ds-text">
+      <div className="ds-pattern" aria-hidden />
+      <div className="relative z-10 flex min-h-dvh flex-col">
+        <Header />
+        <main
+          className={`mx-auto w-full max-w-md flex-1 px-4 py-6 leading-[1.65] ${
+            showFooter ? "pb-nav" : "pb-8"
+          }`}
+        >
+          {children}
+        </main>
+        {showFooter ? <FooterNav /> : null}
+      </div>
     </div>
   );
 }

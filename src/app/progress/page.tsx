@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { FadeSlide } from "@/components/motion/FadeSlide";
+import { PageHeading } from "@/components/PageHeading";
 import { ProgressBar } from "@/components/ProgressBar";
 import { chapters } from "@/data/chapters";
 import { useGame } from "@/context/GameContext";
@@ -15,7 +16,7 @@ export default function ProgressPage() {
   if (!hydrated) {
     return (
       <AppShell>
-        <div className="py-20 text-center text-inkMuted dark:text-paper/60 text-sm">
+        <div className="py-20 text-center text-sm text-ds-muted">
           Loading progress…
         </div>
       </AppShell>
@@ -33,60 +34,62 @@ export default function ProgressPage() {
   return (
     <AppShell>
       <FadeSlide>
-        <div className="pt-4 pb-8 space-y-8">
-          <div>
-            <h1 className="text-2xl font-semibold text-ink dark:text-paper mb-2">
-              Your journey
-            </h1>
-            <p className="text-inkMuted dark:text-paper/70 text-[15px] leading-relaxed">
-              Chapters unlock as you finish each reflection quiz. Replay anytime
-              to revisit a scenario.
-            </p>
-          </div>
+        <div className="space-y-6 pb-8 pt-2">
+          <PageHeading
+            title="Your journey"
+            subtitle="Chapters unlock as you finish each reflection quiz"
+          />
+          <p className="text-[15px] leading-spacious text-ds-muted">
+            Replay anytime to revisit a scenario.
+          </p>
 
-          <div className="rounded-2xl bg-card dark:bg-cardDark p-5 shadow-soft border border-ink/5 dark:border-white/5">
+          <div className="rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm">
             <ProgressBar value={done} max={total} label="Chapters completed" />
             {state.streak > 0 ? (
-              <p className="mt-4 text-sm text-inkMuted dark:text-paper/65">
+              <p className="mt-4 text-sm text-ds-muted">
                 Current streak:{" "}
-                <span className="font-medium text-sage-dark dark:text-sage-light">
+                <span className="font-medium text-[var(--primary)]">
                   {state.streak} day{state.streak === 1 ? "" : "s"}
                 </span>
               </p>
             ) : null}
           </div>
 
-          <ul className="space-y-3">
+          <ul className="space-y-4">
             {chapters.map((ch) => {
               const complete = state.completedChapters.includes(ch.id);
               const isCurrent = state.currentChapter === ch.id;
               return (
                 <li
                   key={ch.id}
-                  className="rounded-2xl border border-ink/10 dark:border-white/10 bg-card dark:bg-cardDark p-4 shadow-soft"
+                  className="rounded-2xl border border-ds-line bg-ds-card p-4 shadow-sm"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-sage-dark dark:text-sage-light mb-1">
+                      <p className="mb-1 text-xs uppercase tracking-wider text-[var(--primary)]">
                         Chapter {ch.id}
                       </p>
-                      <h2 className="font-semibold text-ink dark:text-paper">
+                      <h2 className="font-display font-semibold text-ds-text">
                         {ch.title}
                       </h2>
-                      <p className="text-sm text-inkMuted dark:text-paper/65 mt-1">
-                        {complete ? "Completed" : isCurrent ? "In progress" : "Locked"}
+                      <p className="mt-1 text-sm text-ds-muted">
+                        {complete
+                          ? "Completed"
+                          : isCurrent
+                            ? "In progress"
+                            : "Locked"}
                       </p>
                     </div>
                     {complete || isCurrent ? (
                       <button
                         type="button"
                         onClick={() => replay(ch.id)}
-                        className="min-h-[44px] px-4 rounded-xl border border-ink/15 dark:border-white/15 text-sm font-medium text-ink dark:text-paper"
+                        className="min-h-[44px] shrink-0 rounded-xl border border-ds-line bg-ds-card px-4 text-sm font-medium text-ds-text transition-all duration-200 hover:border-[var(--primary)]/50"
                       >
                         Replay chapter
                       </button>
                     ) : (
-                      <span className="text-sm text-inkMuted dark:text-paper/50 py-2">
+                      <span className="py-2 text-sm text-ds-muted/80">
                         Finish previous chapter
                       </span>
                     )}
@@ -96,10 +99,10 @@ export default function ProgressPage() {
             })}
           </ul>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <Link
               href="/game"
-              className="flex min-h-[52px] items-center justify-center rounded-xl bg-sage text-white dark:text-paper font-medium shadow-soft w-full"
+              className="btn-primary mt-0 flex min-h-[52px] items-center justify-center no-underline"
             >
               Continue playing
             </Link>
@@ -116,7 +119,7 @@ export default function ProgressPage() {
                   router.push("/");
                 }
               }}
-              className="min-h-[48px] rounded-xl text-sm text-inkMuted dark:text-paper/60"
+              className="min-h-[48px] rounded-xl text-sm text-ds-muted transition-colors hover:text-ds-text"
             >
               Reset all progress
             </button>

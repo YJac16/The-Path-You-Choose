@@ -2,25 +2,39 @@ export function ProgressBar({
   value,
   max,
   label,
+  percent,
 }: {
-  value: number;
-  max: number;
+  value?: number;
+  max?: number;
   label?: string;
+  /** Direct percentage 0–100; overrides value/max when set */
+  percent?: number;
 }) {
-  const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
+  const pct =
+    percent !== undefined
+      ? Math.min(100, Math.max(0, percent))
+      : max !== undefined && max > 0 && value !== undefined
+        ? Math.min(100, Math.round((value / max) * 100))
+        : 0;
+
+  const labelSuffix =
+    percent !== undefined
+      ? `${pct}%`
+      : value !== undefined && max !== undefined
+        ? `${value}/${max}`
+        : `${pct}%`;
+
   return (
     <div>
       {label ? (
-        <div className="flex justify-between text-sm text-inkMuted dark:text-paper/65 mb-2">
+        <div className="mb-2 flex justify-between text-sm text-ds-muted">
           <span>{label}</span>
-          <span className="tabular-nums">
-            {value}/{max}
-          </span>
+          <span className="tabular-nums">{labelSuffix}</span>
         </div>
       ) : null}
-      <div className="h-3 w-full rounded-full bg-ink/10 dark:bg-white/10 overflow-hidden">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-ds-line">
         <div
-          className="h-full rounded-full bg-sage transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-[var(--primary)] transition-all duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>

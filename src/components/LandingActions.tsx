@@ -11,21 +11,21 @@ export function LandingActions() {
     Object.keys(state.choices).length > 0;
 
   return (
-    <div className="flex flex-col gap-3 max-w-sm mx-auto">
-      <motion.div whileTap={{ scale: 0.99 }}>
+    <div className="mx-auto flex max-w-sm flex-col gap-4">
+      <motion.div whileTap={{ scale: 0.985 }}>
         <Link
           href="/start"
           onClick={() => touchStreak()}
-          className="flex min-h-[52px] items-center justify-center rounded-xl bg-sage text-white dark:text-paper font-medium text-[15px] shadow-soft w-full"
+          className="btn-primary mt-0 flex min-h-[52px] items-center justify-center text-[15px] no-underline"
         >
           Start Journey
         </Link>
       </motion.div>
       {hydrated && hasProgress ? (
-        <motion.div whileTap={{ scale: 0.99 }}>
+        <motion.div whileTap={{ scale: 0.985 }}>
           <Link
             href="/game"
-            className="flex min-h-[52px] items-center justify-center rounded-xl border border-ink/15 dark:border-white/15 bg-card dark:bg-cardDark font-medium text-[15px] w-full"
+            className="btn-secondary mt-0 flex min-h-[52px] items-center justify-center text-[15px] no-underline"
           >
             Continue
           </Link>

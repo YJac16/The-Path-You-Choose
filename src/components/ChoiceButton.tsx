@@ -6,18 +6,24 @@ export function ChoiceButton({
   label,
   onClick,
   disabled,
+  selected,
 }: {
   label: string;
   onClick: () => void;
   disabled?: boolean;
+  selected?: boolean;
 }) {
   return (
     <motion.button
       type="button"
-      whileTap={{ scale: disabled ? 1 : 0.98 }}
+      whileTap={{ scale: disabled ? 1 : 0.985 }}
       onClick={onClick}
       disabled={disabled}
-      className="w-full min-h-[52px] rounded-xl bg-card dark:bg-cardDark border border-ink/10 dark:border-white/10 px-4 py-3 text-left text-ink dark:text-paper shadow-soft text-[15px] leading-snug disabled:opacity-50 active:bg-sage/10 dark:active:bg-sage/20"
+      className={`w-full min-h-[52px] rounded-xl border px-4 py-3 text-left text-[15px] leading-spacious transition-all duration-200 disabled:opacity-50 ${
+        selected
+          ? "border-[var(--primary)] bg-[var(--primary-soft)] text-ds-text"
+          : "border-ds-line bg-ds-card text-ds-text hover:border-[var(--primary)]"
+      }`}
     >
       {label}
     </motion.button>

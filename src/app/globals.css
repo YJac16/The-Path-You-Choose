@@ -4,14 +4,31 @@
 
 :root {
   color-scheme: light;
+  --bg: #f7f5f0;
+  --card: #ffffff;
+  --primary: #3a7d44;
+  --primary-soft: #e6f2e8;
+  --text: #2f2f2f;
+  --muted: #6b6b6b;
+  --border: #e5e5e5;
+  --pattern-color: #3a7d44;
 }
 
 html.dark {
   color-scheme: dark;
+  --bg: #141413;
+  --card: #1f1f1d;
+  --primary: #4d9b59;
+  --primary-soft: #1a2a1d;
+  --text: #f0ede6;
+  --muted: #9c9c94;
+  --border: #33332f;
+  --pattern-color: #4d9b59;
 }
 
 body {
   @apply antialiased;
+  line-height: 1.65;
 }
 
 .safe-top {
@@ -24,4 +41,39 @@ body {
 
 .pb-nav {
   padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Subtle Islamic-inspired geometry — low contrast */
+.ds-pattern {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.045;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%233a7d44' stroke-width='0.65'%3E%3Cpath d='M40 4l6 18 18 6-18 6-6 18-6-18-18-6 18-6z'/%3E%3Cpath d='M40 28l4 12 12 4-12 4-4 12-4-12-12-4 12-4z' opacity='.6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 80px 80px;
+}
+
+html.dark .ds-pattern {
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%234d9b59' stroke-width='0.65'%3E%3Cpath d='M40 4l6 18 18 6-18 6-6 18-6-18-18-6 18-6z'/%3E%3Cpath d='M40 28l4 12 12 4-12 4-4 12-4-12-12-4 12-4z' opacity='.6'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@layer components {
+  .btn-primary {
+    @apply w-full mt-6 min-h-[48px] rounded-xl bg-[var(--primary)] px-4 py-3 font-medium text-white shadow-sm transition-all duration-200;
+  }
+  .btn-primary:hover {
+    @apply opacity-[0.96];
+  }
+  .btn-primary:active {
+    transform: scale(0.99);
+  }
+  .btn-secondary {
+    @apply w-full min-h-[48px] rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-3 font-medium text-[var(--text)] transition-all duration-200;
+  }
+  .btn-secondary:hover {
+    @apply border-[var(--primary)];
+  }
 }
