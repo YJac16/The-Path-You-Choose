@@ -82,7 +82,7 @@ export function GameClient() {
           <p className="mb-2 text-xs uppercase tracking-wider text-[var(--primary)]">
             Milestone
           </p>
-          <h2 className="font-display text-xl font-semibold text-ds-text">
+          <h2 className="text-xl font-semibold text-ds-text">
             You have completed every chapter
           </h2>
           <p className="mt-3 text-[15px] leading-spacious text-ds-muted">

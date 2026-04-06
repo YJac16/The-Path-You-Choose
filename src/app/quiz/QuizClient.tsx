@@ -136,7 +136,7 @@ export function QuizClient() {
               <p className="mb-2 text-xs uppercase tracking-wider text-[var(--primary)]">
                 Chapter complete
               </p>
-              <h2 className="font-display text-xl font-semibold text-ds-text">
+              <h2 className="text-xl font-semibold text-ds-text">
                 You scored {resultScore} / {totalQs}
               </h2>
               <p className="mt-3 text-[15px] leading-spacious text-ds-muted">

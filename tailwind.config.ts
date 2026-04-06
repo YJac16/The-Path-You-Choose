@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: "class",
+  darkMode: ["selector", '[data-theme="dark"]'],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -15,25 +15,14 @@ const config: Config = {
           card: "var(--card)",
           primary: "var(--primary)",
           soft: "var(--primary-soft)",
+          accent: "var(--accent)",
           text: "var(--text)",
           muted: "var(--muted)",
           line: "var(--border)",
         },
-        paper: "#f7f5f0",
-        paperDark: "#141413",
-        ink: "#2f2f2f",
-        inkMuted: "#6b6b6b",
-        sage: {
-          DEFAULT: "#3a7d44",
-          light: "#4d9b59",
-          dark: "#2d6336",
-        },
-        card: "#ffffff",
-        cardDark: "#1f1f1d",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-poppins)", "var(--font-inter)", "system-ui", "sans-serif"],
       },
       lineHeight: {
         relaxed: "1.65",

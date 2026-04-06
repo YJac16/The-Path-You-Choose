@@ -35,7 +35,7 @@ export function QuizCard({
       <p className="text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
         Question {index + 1} of {total}
       </p>
-      <h3 className="font-display text-lg font-medium leading-snug text-ds-text">
+      <h3 className="text-lg font-medium leading-snug text-ds-text">
         {item.question}
       </h3>
       <ul className="flex flex-col gap-3">

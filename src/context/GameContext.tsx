@@ -17,8 +17,13 @@ import {
 import { computeNewBadgeIds } from "@/lib/badges";
 import { countFilledReflections } from "@/lib/reflectionCount";
 import { bumpStreak, loadPersisted, savePersisted } from "@/lib/storage";
+import {
+  applyDocumentTheme,
+  getStoredTheme,
+  readDocumentTheme,
+} from "@/lib/theme";
 import type { GamePersisted, GamePhase, UserType } from "@/types/game";
-import { defaultPersisted } from "@/types/game";
+import { defaultPersisted, STORAGE_KEY } from "@/types/game";
 
 type GameContextValue = {
   state: GamePersisted;
@@ -48,14 +53,20 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const loaded = loadPersisted();
-    setState(loaded);
-    setHydrated(true);
-    if (typeof document !== "undefined") {
-      document.documentElement.classList.toggle(
-        "dark",
-        loaded.theme === "dark"
-      );
+    const hasGameSave = localStorage.getItem(STORAGE_KEY) !== null;
+    let theme: GamePersisted["theme"];
+    if (getStoredTheme() === null && hasGameSave) {
+      theme = loaded.theme;
+      applyDocumentTheme(theme);
+    } else {
+      theme = readDocumentTheme();
     }
+    const merged = { ...loaded, theme };
+    if (merged.theme !== loaded.theme) {
+      savePersisted(merged);
+    }
+    setState(merged);
+    setHydrated(true);
   }, []);
 
   const patch = useCallback((fn: (prev: GamePersisted) => GamePersisted) => {
@@ -127,8 +138,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             nextChapter = chapterId + 1;
           }
         } else {
-          nextChapter =
-            completed.length > 0 ? Math.max(...completed) : prev.currentChapter;
+          const candidate =
+            chapterId < maxId ? chapterId + 1 : maxId;
+          nextChapter = Math.max(prev.currentChapter, candidate);
         }
         const updated: GamePersisted = {
           ...prev,
@@ -180,18 +192,20 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   );
 
   const resetProgress = useCallback(() => {
-    patch((prev) => ({
-      ...defaultPersisted,
-      userType: prev.userType,
-      theme: prev.theme,
-    }));
+    patch((prev) => {
+      const theme = prev.theme;
+      applyDocumentTheme(theme);
+      return {
+        ...defaultPersisted,
+        userType: prev.userType,
+        theme,
+      };
+    });
   }, [patch]);
 
   const setTheme = useCallback(
     (theme: "light" | "dark") => {
-      if (typeof document !== "undefined") {
-        document.documentElement.classList.toggle("dark", theme === "dark");
-      }
+      applyDocumentTheme(theme);
       patch((prev) => ({ ...prev, theme }));
     },
     [patch]

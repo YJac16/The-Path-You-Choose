@@ -10,11 +10,11 @@ export default function HomePage() {
         <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--primary)]">
           Interactive reflection
         </p>
-        <h1 className="font-display text-center text-3xl font-semibold leading-tight tracking-tight text-ds-text sm:text-4xl">
+        <h1 className="text-center text-3xl font-semibold leading-tight tracking-tight text-ds-text sm:text-4xl">
           The Path You Choose
         </h1>
-        <p className="mx-auto max-w-md text-center text-lg leading-spacious text-ds-muted">
-          Learn Islam through choices, reflection, and discovery
+        <p className="mx-auto max-w-md text-center text-lg font-medium leading-spacious text-ds-text">
+          Learn through choices. Grow through reflection.
         </p>
         <DailyJourneyPrompt />
         <LandingActions />

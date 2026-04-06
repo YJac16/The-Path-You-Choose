@@ -7,7 +7,7 @@ export function PageHeading({
 }) {
   return (
     <div className="mb-6">
-      <h1 className="font-display text-xl font-semibold tracking-tight text-ds-text">
+      <h1 className="text-xl font-semibold tracking-tight text-ds-text">
         {title}
       </h1>
       <div

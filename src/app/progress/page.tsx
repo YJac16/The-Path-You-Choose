@@ -123,7 +123,7 @@ export default function ProgressPage() {
                       <p className="mb-1 text-xs uppercase tracking-wider text-[var(--primary)]">
                         Chapter {ch.id}
                       </p>
-                      <h2 className="font-display font-semibold text-ds-text">
+                      <h2 className="font-semibold text-ds-text">
                         {ch.title}
                       </h2>
                       <p className="mt-1 text-sm text-ds-muted">
