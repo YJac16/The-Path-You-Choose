@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Poppins } from "next/font/google";
+import { ClientProviders } from "@/components/ClientProviders";
 import { GameProvider } from "@/context/GameContext";
 import "./globals.css";
 
@@ -39,7 +40,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${poppins.variable} font-sans text-ds-text bg-ds-bg`}
       >
-        <GameProvider>{children}</GameProvider>
+        <GameProvider>
+          <ClientProviders>{children}</ClientProviders>
+        </GameProvider>
       </body>
     </html>
   );

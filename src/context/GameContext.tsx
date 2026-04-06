@@ -14,6 +14,8 @@ import {
   normalizeImpact,
   subtractTotals,
 } from "@/lib/impact";
+import { computeNewBadgeIds } from "@/lib/badges";
+import { countFilledReflections } from "@/lib/reflectionCount";
 import { bumpStreak, loadPersisted, savePersisted } from "@/lib/storage";
 import type { GamePersisted, GamePhase, UserType } from "@/types/game";
 import { defaultPersisted } from "@/types/game";
@@ -30,6 +32,7 @@ type GameContextValue = {
   resetProgress: () => void;
   setTheme: (t: "light" | "dark") => void;
   touchStreak: () => void;
+  clearLastRewardBadges: () => void;
 };
 
 const GameContext = createContext<GameContextValue | null>(null);
@@ -133,7 +136,17 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           quizScores,
           currentChapter: nextChapter,
         };
-        return bumpStreak(updated);
+        const afterStreak = bumpStreak(updated);
+        const reflections = countFilledReflections();
+        const newBadgeIds = computeNewBadgeIds(prev, afterStreak, reflections);
+        const badgesUnlocked = [
+          ...new Set([...prev.badgesUnlocked, ...newBadgeIds]),
+        ];
+        return {
+          ...afterStreak,
+          badgesUnlocked,
+          lastRewardBadges: newBadgeIds,
+        };
       });
     },
     [patch]
@@ -188,6 +201,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     patch((prev) => bumpStreak(prev));
   }, [patch]);
 
+  const clearLastRewardBadges = useCallback(() => {
+    patch((prev) => ({ ...prev, lastRewardBadges: [] }));
+  }, [patch]);
+
   const value = useMemo(
     () => ({
       state,
@@ -201,6 +218,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       resetProgress,
       setTheme,
       touchStreak,
+      clearLastRewardBadges,
     }),
     [
       state,
@@ -214,6 +232,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       resetProgress,
       setTheme,
       touchStreak,
+      clearLastRewardBadges,
     ]
   );
 

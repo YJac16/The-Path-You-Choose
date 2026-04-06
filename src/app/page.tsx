@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
+import { DailyJourneyPrompt } from "@/components/DailyJourneyPrompt";
 import { LandingActions } from "@/components/LandingActions";
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
         <p className="mx-auto max-w-md text-center text-lg leading-spacious text-ds-muted">
           Learn Islam through choices, reflection, and discovery
         </p>
+        <DailyJourneyPrompt />
         <LandingActions />
         <p className="mx-auto mt-6 max-w-sm text-center text-sm leading-spacious text-ds-muted">
           A respectful space for new Muslims, lifelong learners, and curious

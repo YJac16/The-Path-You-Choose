@@ -1,3 +1,7 @@
+"use client";
+
+import { ListenButton } from "@/components/ListenButton";
+
 export function ExplanationCard({
   text,
   reference,
@@ -5,6 +9,8 @@ export function ExplanationCard({
   text: string;
   reference?: string;
 }) {
+  const narration = [text, reference].filter(Boolean).join(" ");
+
   return (
     <div className="mt-1 rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm">
       <p className="mb-2 text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
@@ -16,6 +22,7 @@ export function ExplanationCard({
           {reference}
         </div>
       ) : null}
+      <ListenButton text={narration} />
     </div>
   );
 }

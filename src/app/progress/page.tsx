@@ -6,6 +6,7 @@ import { AppShell } from "@/components/AppShell";
 import { FadeSlide } from "@/components/motion/FadeSlide";
 import { PageHeading } from "@/components/PageHeading";
 import { ProgressBar } from "@/components/ProgressBar";
+import { badgeCatalog } from "@/data/badges";
 import { chapters } from "@/data/chapters";
 import { useGame } from "@/context/GameContext";
 
@@ -53,6 +54,36 @@ export default function ProgressPage() {
                 </span>
               </p>
             ) : null}
+          </div>
+
+          <div className="rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm">
+            <p className="mb-3 text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
+              Badges
+            </p>
+            <p className="mb-3 text-sm text-ds-muted">
+              Earned as you learn, reflect, and return consistently.
+            </p>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {badgeCatalog.map((b) => {
+                const unlocked = state.badgesUnlocked.includes(b.id);
+                return (
+                  <li
+                    key={b.id}
+                    className={`rounded-xl border px-3 py-2.5 text-sm ${
+                      unlocked
+                        ? "border-[var(--primary)]/35 bg-[var(--primary-soft)] font-medium text-ds-text"
+                        : "border-ds-line text-ds-muted"
+                    }`}
+                  >
+                    <span className="mr-1.5">{b.emoji}</span>
+                    {b.title}
+                    {!unlocked ? (
+                      <span className="ml-1 text-xs opacity-70"> · Locked</span>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
           <div className="rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm">

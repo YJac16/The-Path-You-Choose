@@ -1,6 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useAudio } from "@/context/AudioContext";
+import { playClickSound } from "@/lib/audioFx";
+import { lightHaptic } from "@/lib/haptics";
 import type { QuizItem } from "@/types/game";
 
 export function QuizCard({
@@ -18,6 +21,15 @@ export function QuizCard({
   revealed: boolean;
   onSelect: (i: number) => void;
 }) {
+  const { enabled: audioOn } = useAudio();
+
+  function pick(i: number) {
+    if (revealed) return;
+    lightHaptic();
+    if (audioOn) playClickSound();
+    onSelect(i);
+  }
+
   return (
     <div className="space-y-4 rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm">
       <p className="text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
@@ -49,7 +61,7 @@ export function QuizCard({
                 type="button"
                 whileTap={{ scale: revealed ? 1 : 0.985 }}
                 disabled={revealed}
-                onClick={() => onSelect(i)}
+                onClick={() => pick(i)}
                 className={`w-full min-h-[52px] rounded-xl border px-4 py-3 text-left text-[15px] transition-all duration-200 disabled:cursor-default ${cls}`}
               >
                 {opt}

@@ -10,11 +10,13 @@ import { GameStepIndicator } from "@/components/GameStepIndicator";
 import { FadeSlide } from "@/components/motion/FadeSlide";
 import { PageHeading } from "@/components/PageHeading";
 import { QuizCard } from "@/components/QuizCard";
+import { badgeById } from "@/data/badges";
 import { useGame } from "@/context/GameContext";
 
 export function QuizClient() {
   const router = useRouter();
-  const { state, hydrated, completeQuiz, touchStreak } = useGame();
+  const { state, hydrated, completeQuiz, touchStreak, clearLastRewardBadges } =
+    useGame();
   const cid = state.currentChapter;
   const chapter = getChapter(cid);
   const phase = state.phases[cid];
@@ -106,6 +108,30 @@ export function QuizClient() {
         <FadeSlide>
           <div className="space-y-6">
             <ChoiceImpactSummary impact={picked?.impact} />
+
+            {state.lastRewardBadges.length > 0 ? (
+              <div className="rounded-xl border border-ds-line bg-[var(--primary-soft)] p-4 text-center shadow-sm">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
+                  New badge{state.lastRewardBadges.length > 1 ? "s" : ""}
+                </p>
+                <ul className="flex flex-col gap-1.5 text-sm font-medium text-ds-text">
+                  {state.lastRewardBadges.map((bid) => {
+                    const b = badgeById(bid);
+                    return (
+                      <li key={bid}>
+                        {b?.emoji} {b?.title ?? bid}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : null}
+
+            <p className="text-center text-sm text-ds-muted">
+              🔥 <span className="font-medium text-ds-text">{state.streak}</span>{" "}
+              day{state.streak === 1 ? "" : "s"} streak
+            </p>
+
             <div className="rounded-2xl border border-ds-line bg-ds-card p-6 text-center shadow-sm">
               <p className="mb-2 text-xs uppercase tracking-wider text-[var(--primary)]">
                 Chapter complete
@@ -121,6 +147,7 @@ export function QuizClient() {
             {cid < maxChapterId() ? (
               <Link
                 href="/game"
+                onClick={() => clearLastRewardBadges()}
                 className="btn-primary mt-0 flex min-h-[52px] items-center justify-center no-underline"
               >
                 Next chapter
@@ -128,6 +155,7 @@ export function QuizClient() {
             ) : (
               <Link
                 href="/progress"
+                onClick={() => clearLastRewardBadges()}
                 className="btn-primary mt-0 flex min-h-[52px] items-center justify-center no-underline"
               >
                 View journey

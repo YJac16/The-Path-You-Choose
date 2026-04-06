@@ -59,6 +59,9 @@ export interface GamePersisted {
   metrics: ImpactTotals;
   /** Impact last applied per chapter (for replay / choice changes) */
   impactApplied: Record<number, ImpactTotals>;
+  badgesUnlocked: string[];
+  /** Badges earned in the most recent chapter completion (for reward screen) */
+  lastRewardBadges: string[];
 }
 
 export const STORAGE_KEY = "the-path-you-choose-state";
@@ -75,4 +78,6 @@ export const defaultPersisted: GamePersisted = {
   theme: "light",
   metrics: { knowledge: 0, reflection: 0, awareness: 0 },
   impactApplied: {},
+  badgesUnlocked: [],
+  lastRewardBadges: [],
 };

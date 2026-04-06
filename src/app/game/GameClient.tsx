@@ -3,7 +3,7 @@
 import { AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { chapters, getChapter } from "@/data/chapters";
 import { ChoiceButton } from "@/components/ChoiceButton";
 import { ExplanationCard } from "@/components/ExplanationCard";
@@ -13,6 +13,7 @@ import { OutcomeCard } from "@/components/OutcomeCard";
 import { PageHeading } from "@/components/PageHeading";
 import { ReflectionCard } from "@/components/ReflectionCard";
 import { ScenarioCard } from "@/components/ScenarioCard";
+import { useAudio } from "@/context/AudioContext";
 import { useGame } from "@/context/GameContext";
 import type { GamePhase } from "@/types/game";
 
@@ -25,12 +26,26 @@ function stepForPhase(phase: GamePhase): "Scenario" | "Outcome" | "Learn" {
 export function GameClient() {
   const router = useRouter();
   const { state, hydrated, selectChoice, setPhase, touchStreak } = useGame();
+  const { enabled: audioOn } = useAudio();
+  const adhanPlayedRef = useRef(false);
 
   const cid = state.currentChapter;
   const chapter = getChapter(cid);
   const choiceId = state.choices[cid];
   const phase: GamePhase =
     state.phases[cid] ?? (choiceId ? "outcome" : "scenario");
+
+  useEffect(() => {
+    if (cid !== 3 || phase !== "explanation") {
+      adhanPlayedRef.current = false;
+      return;
+    }
+    if (!audioOn || adhanPlayedRef.current) return;
+    adhanPlayedRef.current = true;
+    const a = new Audio("/audio/adhan.mp3");
+    a.volume = 0.42;
+    void a.play().catch(() => {});
+  }, [cid, phase, audioOn]);
 
   useEffect(() => {
     if (hydrated) touchStreak();

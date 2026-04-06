@@ -18,6 +18,10 @@ export function loadPersisted(): GamePersisted {
         ...(parsed.metrics ?? {}),
       },
       impactApplied: parsed.impactApplied ?? defaultPersisted.impactApplied,
+      badgesUnlocked:
+        parsed.badgesUnlocked ?? defaultPersisted.badgesUnlocked,
+      lastRewardBadges:
+        parsed.lastRewardBadges ?? defaultPersisted.lastRewardBadges,
     };
   } catch {
     return { ...defaultPersisted };
