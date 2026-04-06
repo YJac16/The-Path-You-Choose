@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getChapter, maxChapterId } from "@/data/chapters";
+import { ChoiceImpactSummary } from "@/components/ChoiceImpactSummary";
 import { GameStepIndicator } from "@/components/GameStepIndicator";
 import { FadeSlide } from "@/components/motion/FadeSlide";
 import { PageHeading } from "@/components/PageHeading";
@@ -95,12 +96,16 @@ export function QuizClient() {
   const totalQs = chapter.quiz.length;
 
   if (finished && resultScore !== null) {
+    const picked = chapter.choices.find(
+      (c) => c.id === state.choices[cid]
+    );
     return (
       <div className="space-y-6">
         <PageHeading title="Results" subtitle={chapter.title} />
         <GameStepIndicator active="Quiz" />
         <FadeSlide>
           <div className="space-y-6">
+            <ChoiceImpactSummary impact={picked?.impact} />
             <div className="rounded-2xl border border-ds-line bg-ds-card p-6 text-center shadow-sm">
               <p className="mb-2 text-xs uppercase tracking-wider text-[var(--primary)]">
                 Chapter complete

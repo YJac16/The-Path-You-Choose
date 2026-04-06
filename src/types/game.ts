@@ -2,10 +2,23 @@ export type UserType = "new-muslim" | "practicing" | "curious";
 
 export type GamePhase = "scenario" | "outcome" | "explanation";
 
+export interface ChoiceImpact {
+  knowledge?: number;
+  reflection?: number;
+  awareness?: number;
+}
+
+export type ImpactTotals = {
+  knowledge: number;
+  reflection: number;
+  awareness: number;
+};
+
 export interface GameChoice {
   id: string;
   text: string;
   outcome: string;
+  impact?: ChoiceImpact;
 }
 
 export interface QuizItem {
@@ -13,6 +26,11 @@ export interface QuizItem {
   options: string[];
   answer: number;
   explanation: string;
+}
+
+export interface ChapterReflection {
+  question: string;
+  placeholder: string;
 }
 
 export interface Chapter {
@@ -24,6 +42,7 @@ export interface Chapter {
     text: string;
     reference?: string;
   };
+  reflection: ChapterReflection;
   quiz: QuizItem[];
 }
 
@@ -31,14 +50,15 @@ export interface GamePersisted {
   userType: UserType | null;
   currentChapter: number;
   completedChapters: number[];
-  /** choice id per chapter */
   choices: Record<number, string>;
-  /** narrative phase per chapter (before quiz) */
   phases: Record<number, GamePhase>;
   quizScores: Record<number, number>;
   lastPlayDate: string | null;
   streak: number;
   theme: "light" | "dark";
+  metrics: ImpactTotals;
+  /** Impact last applied per chapter (for replay / choice changes) */
+  impactApplied: Record<number, ImpactTotals>;
 }
 
 export const STORAGE_KEY = "the-path-you-choose-state";
@@ -53,4 +73,6 @@ export const defaultPersisted: GamePersisted = {
   lastPlayDate: null,
   streak: 0,
   theme: "light",
+  metrics: { knowledge: 0, reflection: 0, awareness: 0 },
+  impactApplied: {},
 };

@@ -8,7 +8,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import { maxChapterId } from "@/data/chapters";
+import { getChapter, maxChapterId } from "@/data/chapters";
+import {
+  addTotals,
+  normalizeImpact,
+  subtractTotals,
+} from "@/lib/impact";
 import { bumpStreak, loadPersisted, savePersisted } from "@/lib/storage";
 import type { GamePersisted, GamePhase, UserType } from "@/types/game";
 import { defaultPersisted } from "@/types/game";
@@ -70,11 +75,25 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const selectChoice = useCallback(
     (chapterId: number, choiceId: string) => {
-      patch((prev) => ({
-        ...prev,
-        choices: { ...prev.choices, [chapterId]: choiceId },
-        phases: { ...prev.phases, [chapterId]: "outcome" },
-      }));
+      patch((prev) => {
+        const chapter = getChapter(chapterId);
+        const choice = chapter?.choices.find((c) => c.id === choiceId);
+        const newDelta = normalizeImpact(choice?.impact);
+        const prevApplied = prev.impactApplied[chapterId]
+          ? normalizeImpact(prev.impactApplied[chapterId])
+          : normalizeImpact(undefined);
+        const metrics = addTotals(
+          subtractTotals(prev.metrics, prevApplied),
+          newDelta
+        );
+        return {
+          ...prev,
+          choices: { ...prev.choices, [chapterId]: choiceId },
+          phases: { ...prev.phases, [chapterId]: "outcome" },
+          metrics,
+          impactApplied: { ...prev.impactApplied, [chapterId]: newDelta },
+        };
+      });
     },
     [patch]
   );
@@ -123,15 +142,24 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const replayChapter = useCallback(
     (chapterId: number) => {
       patch((prev) => {
+        const applied = prev.impactApplied[chapterId];
+        let metrics = prev.metrics;
+        if (applied) {
+          metrics = subtractTotals(prev.metrics, normalizeImpact(applied));
+        }
         const { [chapterId]: _c, ...restChoices } = prev.choices;
         const { [chapterId]: _p, ...restPhases } = prev.phases;
+        const { [chapterId]: _i, ...restImpact } = prev.impactApplied;
         void _c;
         void _p;
+        void _i;
         return {
           ...prev,
           currentChapter: chapterId,
           choices: restChoices,
           phases: restPhases,
+          metrics,
+          impactApplied: restImpact,
         };
       });
     },

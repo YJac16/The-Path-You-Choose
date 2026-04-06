@@ -55,6 +55,29 @@ export default function ProgressPage() {
             ) : null}
           </div>
 
+          <div className="rounded-2xl border border-ds-line bg-ds-card p-5 shadow-sm">
+            <p className="mb-3 text-xs font-medium uppercase tracking-wider text-[var(--primary)]">
+              Journey focus
+            </p>
+            <p className="text-sm text-ds-muted mb-3">
+              Running totals from your path choices (replay adjusts scores).
+            </p>
+            <ul className="flex flex-col gap-2 text-sm font-medium text-ds-text tabular-nums">
+              <li className="flex justify-between border-b border-ds-line/80 pb-2">
+                <span className="text-ds-muted font-normal">Knowledge</span>
+                <span>{state.metrics.knowledge}</span>
+              </li>
+              <li className="flex justify-between border-b border-ds-line/80 pb-2">
+                <span className="text-ds-muted font-normal">Reflection</span>
+                <span>{state.metrics.reflection}</span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-ds-muted font-normal">Awareness</span>
+                <span>{state.metrics.awareness}</span>
+              </li>
+            </ul>
+          </div>
+
           <ul className="space-y-4">
             {chapters.map((ch) => {
               const complete = state.completedChapters.includes(ch.id);

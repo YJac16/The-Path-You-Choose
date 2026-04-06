@@ -10,7 +10,15 @@ export function loadPersisted(): GamePersisted {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { ...defaultPersisted };
     const parsed = JSON.parse(raw) as Partial<GamePersisted>;
-    return { ...defaultPersisted, ...parsed };
+    return {
+      ...defaultPersisted,
+      ...parsed,
+      metrics: {
+        ...defaultPersisted.metrics,
+        ...(parsed.metrics ?? {}),
+      },
+      impactApplied: parsed.impactApplied ?? defaultPersisted.impactApplied,
+    };
   } catch {
     return { ...defaultPersisted };
   }

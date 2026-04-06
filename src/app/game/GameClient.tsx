@@ -11,6 +11,7 @@ import { GameStepIndicator } from "@/components/GameStepIndicator";
 import { FadeSlide } from "@/components/motion/FadeSlide";
 import { OutcomeCard } from "@/components/OutcomeCard";
 import { PageHeading } from "@/components/PageHeading";
+import { ReflectionCard } from "@/components/ReflectionCard";
 import { ScenarioCard } from "@/components/ScenarioCard";
 import { useGame } from "@/context/GameContext";
 import type { GamePhase } from "@/types/game";
@@ -134,6 +135,11 @@ export function GameClient() {
               <ExplanationCard
                 text={chapter.explanation.text}
                 reference={chapter.explanation.reference}
+              />
+              <ReflectionCard
+                chapterId={cid}
+                question={chapter.reflection.question}
+                placeholder={chapter.reflection.placeholder}
               />
               <Link
                 href="/quiz"
